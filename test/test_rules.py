@@ -21,7 +21,7 @@ class TestPreprocess(unittest.TestCase):
              ("www.facebook.com", "www.facebook.com")
             },
             {("espn.go.com", "espn.go.com")},
-            {("espn.go.com", "www.facebook.com"), ("espn.go.com", "www.google.com"), ("www.facebook.com", "www.google.com")},
+            {},
         ]
         for parts, expected in zip(input_parts, expected_pairs):
             for item in parse_urls(parts, None):
@@ -30,4 +30,7 @@ class TestPreprocess(unittest.TestCase):
                 self.assertIn(tup, expected)
                 expected.discard(tup)
                 self.assertEqual(item["count"], 1)
+            # assert that expected is empty - all pairs should have been seen and discarded
+            self.assertEqual(len(expected), 0)
+
 
