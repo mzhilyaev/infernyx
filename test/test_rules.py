@@ -11,6 +11,16 @@ class TestPreprocess(unittest.TestCase):
             {"tiles": [{"url": "www.google.com", "score": 1}, {"url": "www.facebook.com"}, {"url": "espn.go.com"}, {"id": 610}], "view": 6},
             {"tiles": [{"score": 1}, {}, {"url": "espn.go.com"}, {"id": 610}], "view": 6},
             {"tiles": [{"score": 1}, {}, {}, {"id": 610}], "view": 6},
+            # test removal of duplicate tiles
+            {"tiles": [{"url": "www.google.com", "score": 1},
+                       {"url": "espn.go.com"},
+                       {"url": "www.facebook.com"},
+                       {"url": "www.facebook.com"},
+                       {"url": "espn.go.com"},
+                       {"url": "www.google.com"},
+                       {"id": 610}],
+             "view": 6
+            },
         ]
         expected_pairs = [
             {("espn.go.com", "www.facebook.com"),
@@ -22,10 +32,18 @@ class TestPreprocess(unittest.TestCase):
             },
             {("espn.go.com", "espn.go.com")},
             {},
+            # test removal of duplicate tiles
+            {("espn.go.com", "www.facebook.com"),
+             ("espn.go.com", "espn.go.com"),
+             ("espn.go.com", "www.google.com"),
+             ("www.google.com", "www.google.com"),
+             ("www.facebook.com", "www.google.com"),
+             ("www.facebook.com", "www.facebook.com")
+            },
         ]
         for parts, expected in zip(input_parts, expected_pairs):
             for item in parse_urls(parts, None):
-                print item
+                # print item
                 tup = (item['url_a'], item['url_b'])
                 self.assertIn(tup, expected)
                 expected.discard(tup)

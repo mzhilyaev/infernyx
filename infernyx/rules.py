@@ -185,10 +185,11 @@ def parse_tiles(parts, params):
 
 
 def parse_urls(parts, params):
-    def combos(arr):
-        for i, ela in enumerate(arr):
-            rest = arr[i:]
-            for elb in rest:
+    def combos(urlSet):
+        while (len(urlSet) > 0):
+            ela = urlSet.pop()
+            yield ela, ela
+            for elb in urlSet:
                 if elb < ela:
                     yield elb, ela
                 else:
@@ -202,7 +203,7 @@ def parse_urls(parts, params):
         country_code = parts.get('country_code')
 
         urls = [tile.get('url') for tile in tiles if tile.get('url')]
-        for url_a, url_b in combos(urls):
+        for url_a, url_b in combos(set(urls)):
             # print date, locale, country_code, url_a, url_b
             yield {'date': date, 'locale': locale, 'country_code': country_code, 'url_a': url_a, 'url_b': url_b,
                    'count': 1}
