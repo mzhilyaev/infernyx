@@ -13,7 +13,13 @@ class TestPreprocess(unittest.TestCase):
             {"tiles": [{"score": 1}, {}, {}, {"id": 610}], "view": 6},
         ]
         expected_pairs = [
-            {("espn.go.com", "www.facebook.com"), ("espn.go.com", "espn.go.com"), ("espn.go.com", "www.google.com"), ("www.google.com", "www.google.com"), ("www.facebook.com", "www.google.com"), ("www.facebook.com", "www.facebook.com")},
+            {("espn.go.com", "www.facebook.com"),
+             ("espn.go.com", "espn.go.com"),
+             ("espn.go.com", "www.google.com"),
+             ("www.google.com", "www.google.com"),
+             ("www.facebook.com", "www.google.com"),
+             ("www.facebook.com", "www.facebook.com")
+            },
             {("espn.go.com", "espn.go.com")},
             {("espn.go.com", "www.facebook.com"), ("espn.go.com", "www.google.com"), ("www.facebook.com", "www.google.com")},
         ]
@@ -24,3 +30,4 @@ class TestPreprocess(unittest.TestCase):
                 self.assertIn(tup, expected)
                 expected.discard(tup)
                 self.assertEqual(item["count"], 1)
+
